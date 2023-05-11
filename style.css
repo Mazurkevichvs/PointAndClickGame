@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('img/bg.jpg');
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+img {
+    z-index: 0;
+    width: 1500px;
+    height: 800px;
+}
+
+.inventory {
+    display: flex;
+    justify-content: center;
+}
+
+.item {
+    width: 150px;
+    height: 150px;
+    background-color: #9A7D5D;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#box_key {
+    height: 50%;    
+}
+.item img {
+    width: 90%;
+    height: 90%;
+}

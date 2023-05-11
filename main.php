@@ -1,4 +1,4 @@
-<!-- коробка(ключ и кусок кода) - дверь - комната - картины(ключ) - полка(пульт) - телевизор(картинка книги) - книжный шкаф(лист с кодом) - первая комната - выключатель  -->
+git a<!-- коробка(ключ и кусок кода) - дверь - комната - картины(ключ) - полка(пульт) - телевизор(картинка книги) - книжный шкаф(лист с кодом) - первая комната - выключатель  -->
 
 <?php
 session_start();
@@ -6,10 +6,10 @@ if (!isset($_SESSION['game_state'])) {
     $game_state = array(
         'room' => 'room1',
         'objects' => array(),
+        'pics' => array(),
     );
     $_SESSION['game_state'] = $game_state;
 }
-var_dump($_SESSION['game_state']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,105 +18,103 @@ var_dump($_SESSION['game_state']);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            /* background-image: url('img/bg.jpg'); */
-        }
-
-        img {
-            z-index: 0;
-            width: 1500px;
-            height: 800px;
-        }
-
-        .inventory {
-            display: flex;
-            justify-content: center;
-        }
-
-        .item {
-            width: 150px;
-            height: 150px;
-            background-color: #9A7D5D;
-            border: 2px solid black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        #box_key {
-            height: 50%;    
-        }
-        .item img {
-            width: 90%;
-            height: 90%;
-        }
-
-    </style>
+    <title>EscapeRoom</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <?php
     if ($_SESSION['game_state']['room'] === 'room1') {
         echo "<img src='img/room1.png' alt='' usemap='#room1'>";
-    } else
+    } else if ($_SESSION['game_state']['room'] === 'room2')
         echo "<img src='img/room2.png' alt='' usemap='#room2'>";
+    else
+        echo "<img src='img/bookcase.jpg' alt='' usemap='#bookcase'>";
     ?>
+    <map name="bookcase">
+        <area target="" alt="" title="book" href="book.php" coords="105,5,168,249" shape="rect">
+    </map>
     <map name="room1">
-        <area target="" alt="" title="codebox" href="" coords="1383,623,1499,470" shape="rect">
+        <?php
+        if (in_array('box_code', $_SESSION['game_state']['objects'])) {
+            echo "<area target='' alt='' title='codebox' href='door.php' coords='1383,623,1499,470' shape='rect'>";
+        }
+        ?>
         <area target="" alt="" title="box" href="box.php" coords="279,629,483,449" shape="rect">
         <?php
-            if (in_array('box_key', $_SESSION['game_state']['objects'])) {
-                echo "<area target='' alt='' title='door' href='door.php' coords='749,268,869,481' shape='rect'>";
-            }
-            ?>
-        
+        if (in_array('box_key', $_SESSION['game_state']['objects'])) {
+            echo "<area target='' alt='' title='door' href='door.php' coords='749,268,869,481' shape='rect'>";
+        }
+        ?>
     </map>
 
     <map name="room2">
-        <area target="" alt="" title="" href="" coords="515,135,696,272" shape="rect">
-        <area target="" alt="" title="" href="" coords="821,53,967,191" shape="rect">
-        <area target="" alt="" title="" href="" coords="1099,36,1181,163" shape="rect">
-        <area target="" alt="" title="" href="" coords="1263,57,1372,196" shape="rect">
-        <area target="" alt="" title="" href="" coords="254,61,350,179" shape="rect">
-        <area target="" alt="" title="" href="" coords="796,219,947,261" shape="rect">
-        <area target="" alt="" title="" href="" coords="797,264,935,366" shape="rect">
+        <area target="" alt="card" title="card" href="card.php" coords="706,495,885,389" shape="rect">
+        <area target="" alt="pic1" title="pic1" href="pics.php" coords="250,55,354,177" shape="rect">
+        <area target="" alt="pic2" title="pic2" href="pics.php" coords="1102,42,1177,165" shape="rect">
+        <area target="" alt="pic3" title="pic3" href="pics.php" coords="1265,54,1368,201" shape="rect">
+        <area target="" alt="books" title="books" href="bookcase.php" coords="818,48,969,187" shape="rect">
+        <?php
+        if (in_array('pic_key', $_SESSION['game_state']['objects'])) {
+            echo "<area target='' alt='closet' title='closet' href='remote.php' coords='794,213,949,375' shape='rect'>";
+        }
+        ?>
+        <area target="" alt="tv" title="tv" href="" coords="529,148,692,262" shape="rect">
     </map>
     <div class="inventory">
         <div class="item">
             <?php
-            if (in_array('box_key', $_SESSION['game_state']['objects'])) {
-                echo "<img id='box_key' src='img/box_key.png' alt=''>";
+            if (isset($_SESSION['game_state']['objects'][0])) {
+                $item1 = $_SESSION['game_state']['objects'][0];
+                echo "<img src='img/$item1.png' alt=''>";
             }
             ?>
         </div>
         <div class="item">
             <?php
-            if (in_array('box_code', $_SESSION['game_state']['objects']))
-                echo "<img src='img/code1.png' alt=''>";
-            ?>
-        </div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <div class="item"></div>
-        <?php
-            if ($_SESSION['game_state']['room'] === 'room2') {
-                echo "<a class='item' href='door.php'><img src='/img/back.svg' alt='></a>";
+            if (isset($_SESSION['game_state']['objects'][1])) {
+                $item2 = $_SESSION['game_state']['objects'][1];
+                echo "<img src='img/$item2.png' alt=''>";
             }
             ?>
+        </div>
+        <div class="item">
+            <?php
+            if (isset($_SESSION['game_state']['objects'][2])) {
+                $item3 = $_SESSION['game_state']['objects'][2];
+                echo "<img src='img/$item3.png' alt=''>";
+            }
+            ?>
+        </div>
+        <div class="item">
+            <?php
+            if (isset($_SESSION['game_state']['objects'][3])) {
+                $item4 = $_SESSION['game_state']['objects'][3];
+                echo "<img src='img/$item4.png' alt=''>";
+            }
+            ?>
+        </div>
+        <div class="item">
+            <?php
+            if (isset($_SESSION['game_state']['objects'][4])) {
+                $item5 = $_SESSION['game_state']['objects'][4];
+                echo "<img src='img/$item5.png' alt=''>";
+            }
+            ?>
+        </div>
+        <div class="item">
+            <?php
+            if (isset($_SESSION['game_state']['objects'][5])) {
+                $item6 = $_SESSION['game_state']['objects'][5];
+                echo "<img src='img/$item6.png' alt=''>";
+            }
+            ?>
+        </div>
+        <?php
+        if ($_SESSION['game_state']['room'] === 'room2' || $_SESSION['game_state']['room'] === 'bookcase') {
+            echo "<a class='item' href='back.php'><img src='/img/back.svg' alt=''></a>";
+        }
+        ?>
         <a class="item" href="refresh.php"><img src="/img/refresh.png" alt=""></a>
     </div>
 </body>
