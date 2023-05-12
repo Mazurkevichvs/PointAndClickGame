@@ -33,11 +33,10 @@ img {
     align-items: center;
     cursor: pointer;
 }
-
-#box_key {
-    height: 50%;    
-}
 .item img {
     width: 90%;
     height: 90%;
 }
+
+
+

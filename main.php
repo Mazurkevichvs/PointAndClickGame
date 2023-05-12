@@ -1,12 +1,10 @@
-git a<!-- коробка(ключ и кусок кода) - дверь - комната - картины(ключ) - полка(пульт) - телевизор(картинка книги) - книжный шкаф(лист с кодом) - первая комната - выключатель  -->
-
 <?php
 session_start();
 if (!isset($_SESSION['game_state'])) {
     $game_state = array(
         'room' => 'room1',
         'objects' => array(),
-        'pics' => array(),
+        'tv' => false,
     );
     $_SESSION['game_state'] = $game_state;
 }
@@ -24,20 +22,45 @@ if (!isset($_SESSION['game_state'])) {
 
 <body>
     <?php
-    if ($_SESSION['game_state']['room'] === 'room1') {
-        echo "<img src='img/room1.png' alt='' usemap='#room1'>";
-    } else if ($_SESSION['game_state']['room'] === 'room2')
-        echo "<img src='img/room2.png' alt='' usemap='#room2'>";
-    else
-        echo "<img src='img/bookcase.jpg' alt='' usemap='#bookcase'>";
+    switch ($_SESSION['game_state']['room']) {
+        case 'room1':
+            echo "<img src='img/room1.png' alt='' usemap='#room1'>";
+            break;
+        case 'room2':
+            echo "<img src='img/room2.png' alt='' usemap='#room2'>";
+            break;
+        case 'bookcase':
+            echo "<img src='img/bookcase.jpg' alt='' usemap='#bookcase'>";
+            break;
+        case 'room1_1':
+            echo "<img src='img/room1_1.png' alt='' usemap='#room1'>";
+            break;
+        case 'room2_1':
+            echo "<img src='img/room2_1.png' alt='' usemap='#room2'>";
+            break;
+        case 'room2_card':
+            echo "<img src='img/room2_card.png' alt='' usemap='#room2'>";
+            break;
+        case 'room2_pic':
+            echo "<img src='img/room2_pic.png' alt='' usemap='#room2'>";
+            break;
+        case 'room2_2':
+            echo "<img src='img/room2_2.png' alt='' usemap='#room2'>";
+            break;
+        case 'room2_3':
+            echo "<img src='img/room2_3.png' alt='' usemap='#room2'>";
+            break;
+    }
     ?>
+
     <map name="bookcase">
         <area target="" alt="" title="book" href="book.php" coords="105,5,168,249" shape="rect">
     </map>
+
     <map name="room1">
         <?php
-        if (in_array('box_code', $_SESSION['game_state']['objects'])) {
-            echo "<area target='' alt='' title='codebox' href='door.php' coords='1383,623,1499,470' shape='rect'>";
+        if (in_array('box_code', $_SESSION['game_state']['objects']) && in_array('card_code', $_SESSION['game_state']['objects']) && in_array('book_code', $_SESSION['game_state']['objects'])) {
+            echo "<area target='' alt='' title='codebox' href='end.php' coords='1383,623,1499,470' shape='rect'>";
         }
         ?>
         <area target="" alt="" title="box" href="box.php" coords="279,629,483,449" shape="rect">
@@ -49,18 +72,21 @@ if (!isset($_SESSION['game_state'])) {
     </map>
 
     <map name="room2">
-        <area target="" alt="card" title="card" href="card.php" coords="706,495,885,389" shape="rect">
-        <area target="" alt="pic1" title="pic1" href="pics.php" coords="250,55,354,177" shape="rect">
+        <area target="" alt="card" title="card" href="card.php" coords="706,495,885,389" shape="rect">    
         <area target="" alt="pic2" title="pic2" href="pics.php" coords="1102,42,1177,165" shape="rect">
-        <area target="" alt="pic3" title="pic3" href="pics.php" coords="1265,54,1368,201" shape="rect">
-        <area target="" alt="books" title="books" href="bookcase.php" coords="818,48,969,187" shape="rect">
         <?php
         if (in_array('pic_key', $_SESSION['game_state']['objects'])) {
             echo "<area target='' alt='closet' title='closet' href='remote.php' coords='794,213,949,375' shape='rect'>";
         }
+        if ($_SESSION['game_state']['tv']) {
+            echo "<area target='' alt='books' title='books' href='bookcase.php' coords='818,48,969,187' shape='rect'>";
+        }
+        if (in_array('remote', $_SESSION['game_state']['objects'])) {
+            echo "<area target='' alt='tv' title='tv' href='tv.php' coords='529,148,692,262' shape='rect'>";
+        }
         ?>
-        <area target="" alt="tv" title="tv" href="" coords="529,148,692,262" shape="rect">
     </map>
+
     <div class="inventory">
         <div class="item">
             <?php
@@ -111,7 +137,8 @@ if (!isset($_SESSION['game_state'])) {
             ?>
         </div>
         <?php
-        if ($_SESSION['game_state']['room'] === 'room2' || $_SESSION['game_state']['room'] === 'bookcase') {
+        $room = $_SESSION['game_state']['room'];
+        if (str_contains($room, 'room2') || $room === 'bookcase') {
             echo "<a class='item' href='back.php'><img src='/img/back.svg' alt=''></a>";
         }
         ?>
