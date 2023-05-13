@@ -26,6 +26,7 @@ session_destroy();
             font-size: 50px;
             margin-bottom: 20px;
         }
+
         a {
             font-size: 36px;
         }

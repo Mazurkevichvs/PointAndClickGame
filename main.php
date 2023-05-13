@@ -54,34 +54,35 @@ if (!isset($_SESSION['game_state'])) {
     ?>
 
     <map name="bookcase">
-        <area target="" alt="" title="book" href="book.php" coords="105,5,168,249" shape="rect">
+        <area target="" alt="bookcase" title="bookcase" href="book.php" coords="105,5,168,249" shape="rect">
     </map>
 
     <map name="room1">
         <?php
-        if (in_array('box_code', $_SESSION['game_state']['objects']) && in_array('card_code', $_SESSION['game_state']['objects']) && in_array('book_code', $_SESSION['game_state']['objects'])) {
+        $obj = $_SESSION['game_state']['objects'];
+        if (in_array('box_code', $obj) && in_array('card_code', $obj) && in_array('book_code', $obj)) {
             echo "<area target='' alt='' title='codebox' href='end.php' coords='1383,623,1499,470' shape='rect'>";
         }
         ?>
         <area target="" alt="" title="box" href="box.php" coords="279,629,483,449" shape="rect">
         <?php
-        if (in_array('box_key', $_SESSION['game_state']['objects'])) {
-            echo "<area target='' alt='' title='door' href='door.php' coords='749,268,869,481' shape='rect'>";
+        if (in_array('box_key', $obj)) {
+            echo "<area target='' alt='door' title='door' href='door.php' coords='749,268,869,481' shape='rect'>";
         }
         ?>
     </map>
 
     <map name="room2">
-        <area target="" alt="card" title="card" href="card.php" coords="706,495,885,389" shape="rect">    
+        <area target="" alt="card" title="card" href="card.php" coords="706,495,885,389" shape="rect">
         <area target="" alt="pic2" title="pic2" href="pics.php" coords="1102,42,1177,165" shape="rect">
         <?php
-        if (in_array('pic_key', $_SESSION['game_state']['objects'])) {
+        if (in_array('pic_key', $obj)) {
             echo "<area target='' alt='closet' title='closet' href='remote.php' coords='794,213,949,375' shape='rect'>";
         }
         if ($_SESSION['game_state']['tv']) {
             echo "<area target='' alt='books' title='books' href='bookcase.php' coords='818,48,969,187' shape='rect'>";
         }
-        if (in_array('remote', $_SESSION['game_state']['objects'])) {
+        if (in_array('remote', $obj)) {
             echo "<area target='' alt='tv' title='tv' href='tv.php' coords='529,148,692,262' shape='rect'>";
         }
         ?>
